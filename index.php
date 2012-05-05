@@ -19,7 +19,7 @@ $app->get('/index', function () {
 
 //POST route
 $app->post('/deploy/:payload', function ($payload) {
-    echo $payload
+    echo $payload;
     //$app->response()->status(400);
 });
 

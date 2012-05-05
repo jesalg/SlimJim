@@ -1,4 +1,4 @@
-require 'Slim/Slim.php';
+<?
 
 //With default settings
 $app = new Slim();

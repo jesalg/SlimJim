@@ -8,7 +8,7 @@ require 'libs/Paris/idiorm.php';
 require 'libs/Paris/paris.php';
 
 // Models
-require 'models/Article.php';
+require 'models/Project.php';
 
 //Init DB
 ORM::configure('mysql:host=localhost;dbname=slimjim');
@@ -51,16 +51,16 @@ $app->post('/deploy', function () use ($app) {
     
     $payload = json_decode($payload); 
 
-    if(isset($payload->ref) && $payload->ref === 'refs/heads/develop') {
-
-    	//Check to see if repo is in the model
-    	//if($payload->repository)
+    if(isset($payload->repository) && isset($payload->ref)) {
+    	//Check to see if repo is in the db
+    	$project = Model::factory('Project')
+    				->where_equal('name', $payload->repository->name)
+    				->where_equal('branch', $payload->ref)
+    				->find_one();
 
     	$commands = array(
-	        'whoami',
-	        /*'git fetch origin'
-	        'git reset --hard',
-	        'git rebase origin/develop develop',*/
+	        'cd '. $project->path,
+	        'whoami',  
 	        'git status',
 	    );
 

@@ -13,12 +13,12 @@ $app = new Slim(array(
 ));
 
 //GET route
-$app->get('/index', function ($name) {
+$app->get('/index', function () {
     echo "Hello you've reached SlimJim!";
 });
 
 //POST route
-$app->post('/deploy/:payload', function () {
+$app->post('/deploy/:payload', function ($payload) {
     echo $payload
     //$app->response()->status(400);
 });

@@ -1,11 +1,21 @@
 <?
 
-require 'Slim/Slim.php';
+//Slim
+require 'libs/Slim/Slim.php';
 
-//With default settings
-$app = new Slim();
+// Paris and Idiorm
+require 'libs/Paris/idiorm.php';
+require 'libs/Paris/paris.php';
 
-//With custom settings
+// Models
+require 'models/Article.php';
+
+//Init DB
+ORM::configure('mysql:host=localhost;dbname=slimjim');
+ORM::configure('username', 'root');
+ORM::configure('password', '');
+
+//App with custom settings
 $app = new Slim(array(
     'log.enable' => true,
     'log.path' => './logs',

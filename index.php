@@ -33,10 +33,6 @@ $app->post('/deploy', function () use ($app) {
 	//TODO: Check for github's IP
 	$ip = $app->request()->getIp();
 	
-	//Get the repo or site URL
-
-	//
-
 	//Get the current branch
 	/*$stringfromfile = file(ROOT . '/.git/HEAD', FILE_USE_INCLUDE_PATH);
 	$stringfromfile = $stringfromfile[0]; 
@@ -60,13 +56,13 @@ $app->post('/deploy', function () use ($app) {
 
     	$commands = array(
 	        'cd '. $project->path,
-	        'whoami',  
+	        'git fetch origin',  
 	        'git status',
 	    );
 
 	    $output = '';
 	    foreach($commands AS $command) {
-	        $tmp = shell_exec($command);
+	        $tmp = shell_exec($command . " 2>&1");
 	        $output .= "{$command}\n";
 	        $output .= htmlentities(trim($tmp)) . "\n";
 	    }

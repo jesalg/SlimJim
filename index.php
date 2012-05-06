@@ -48,26 +48,19 @@ $app->post('/deploy', function () use ($app) {
     $payload = json_decode($payload); 
 
     if(isset($payload->repository) && isset($payload->ref)) {
+		$payload_branch = explode("/", $payload->ref);
+		$payload_branch = $payload_branch[2];
+		
     	//Check to see if repo is in the db
     	$project = Model::factory('Project')
     				->where_equal('name', $payload->repository->name)
-    				->where_equal('branch', $payload->ref)
+    				->where_equal('branch', $payload_branch)
     				->find_one();
 
-    	$commands = array(
-	        'cd '. $project->path,
-	        'git fetch origin',  
-	        'git status',
-	    );
+		$file = 'requests/'.$payload->after.'.txt';
+		$content = $project->path.' '.$project->branch;
 
-	    $output = '';
-	    foreach($commands AS $command) {
-	        $tmp = shell_exec($command . " 2>&1");
-	        $output .= "{$command}\n";
-	        $output .= htmlentities(trim($tmp)) . "\n";
-	    }
-	    
-	    echo $output;
+		file_put_contents($file, $content, LOCK_EX);
     	
 	} else {
 		$app->halt(400);

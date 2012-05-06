@@ -5,7 +5,7 @@ $argv = $_SERVER['argv'];
 if (file_exists($argv[0])) {
 
 	//Get first line
-	$request = fopen($argv[0]);
+	$request = fopen("/requests/".$argv[0], "r");
 	$arguments = fgets($request);
 	fclose($request);
 

@@ -1,11 +1,12 @@
 #!/usr/bin/php
 <?php
+
 $argv = $_SERVER['argv'];
 
-if (file_exists($argv[0])) {
+if (file_exists($argv[1])) {
 
 	//Get first line
-	$request = fopen("/requests/".$argv[0], "r");
+	$request = fopen("/requests/".$argv[1], "r");
 	$arguments = fgets($request);
 	fclose($request);
 

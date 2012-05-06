@@ -58,7 +58,7 @@ $app->post('/deploy', function () use ($app) {
     				->find_one();
 
 		$file = 'requests/'.$payload->after.'.txt';
-		$content = $project->path.' '.$project->branch;
+		$content = $project->path.'|'.$project->branch;
 
 		file_put_contents($file, $content, LOCK_EX);
     	

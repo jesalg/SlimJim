@@ -12,8 +12,8 @@ require 'models/Project.php';
 
 //Init DB
 ORM::configure('mysql:host=localhost;dbname=slimjim');
-ORM::configure('username', 'root');
-ORM::configure('password', '');
+ORM::configure('username', 'slimjim');
+ORM::configure('password', 'password');
 
 //App with custom settings
 $app = new Slim(array(
@@ -32,12 +32,6 @@ $app->post('/deploy', function () use ($app) {
 	
 	//TODO: Check for github's IP
 	$ip = $app->request()->getIp();
-	
-	//Get the current branch
-	/*$stringfromfile = file(ROOT . '/.git/HEAD', FILE_USE_INCLUDE_PATH);
-	$stringfromfile = $stringfromfile[0]; 
-	$explodedstring = explode("/", $stringfromfile);
-	$current_branch = $explodedstring[2];*/
 
 	$payload = $app->request()->params('payload');
 
@@ -58,7 +52,7 @@ $app->post('/deploy', function () use ($app) {
     				->find_one();
 
 		$file = 'requests/'.$payload->after.'.txt';
-		$content = $project->path.' '.$project->branch;
+		$content = $project->path.'|'.$project->branch;
 
 		file_put_contents($file, $content, LOCK_EX);
     	

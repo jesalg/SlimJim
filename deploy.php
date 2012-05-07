@@ -1,6 +1,8 @@
 #!/usr/bin/php
 <?php
 
+chdir('/srv/www/slimjim.ruddl.com/public_html/');
+
 $argv = $_SERVER['argv'];
 
 if (file_exists("./requests/".$argv[1])) {

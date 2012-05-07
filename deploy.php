@@ -13,9 +13,12 @@ if (file_exists("./requests/".$argv[1])) {
 	//Split string
 	$params = explode("|", $arguments);
 
+	//Change the working dir
+	chdir($params[0]);
+
 	//Run commands on repo
 	$commands = array(
-	    'cd ' . $params[0],
+	    'unset GIT_DIR',
 	    'git reset --hard',
 	    'git checkout ' . $params[1],
 	    'git fetch origin',  

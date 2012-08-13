@@ -1,43 +1,52 @@
 #!/usr/bin/php
 <?php
+	chdir('/home/domains/ve.vq6t2pyw.vesrv.com/public/');
 
-chdir('/srv/www/slimjim.ruddl.com/public_html/');
+	require "libs/spyc.php";
 
-$argv = $_SERVER['argv'];
+	@ list(, $request_file) = $_SERVER['argv'];
 
-if (file_exists("./requests/".$argv[1])) {
+	if ($request_file && file_exists('requests/' . $request_file)) {
+		if($request_data = file_get_contents('requests/' . $request_file)) {
+			unlink('requests/' . $request_file);
 
-	//Get first line
-	$request = fopen("./requests/".$argv[1], "r");
-	$arguments = fgets($request);
-	fclose($request);
+			$request_data = unserialize($request_data);
 
-	//Split string
-	$params = explode("|", $arguments);
+			chdir($request_data['path']);
 
-	//Change the working dir
-	chdir($params[0]);
+			foreach(array(
+				'git clone ' . $request_data['clone_url'] . ' ./',
+				'git reset --hard',
+				'git checkout ' . $request_data['branch'],
+				'git fetch origin',  
+				'git rebase origin/'. $request_data['branch'] . ' ' . $request_data['branch'],
+				'git status',
+			) AS $command)
+			{
+				syslog(LOG_INFO, $command);
+				syslog(LOG_INFO, "===== " . shell_exec($command . " 2>&1"));
+			}
 
-	//Run commands on repo
-	$commands = array(
-	    'unset GIT_DIR',
-	    'git reset --hard',
-	    'git checkout ' . $params[1],
-	    'git fetch origin',  
-	    'git rebase origin/'. $params[1] . ' ' . $params[1],
-	    'git status',
-	);
+			sleep(1);
 
-	$output = '';
-	foreach($commands AS $command) {
-	    $tmp = shell_exec($command . " 2>&1"); //> /dev/null 2>&1 &
-	    $output .= "{$command}\n";
-	    $output .= htmlentities(trim($tmp)) . "\n";
+			$hooks = @ Spyc::YAMLLoad($request_data['hook_path']) ?: array();
+
+			syslog(LOG_INFO, serialize($hooks));
+
+			if(isset($hooks['writable'])) {
+				foreach($hooks['writable'] AS $make_writeable) {
+					$cmd = "chmod 777 -R " . $make_writeable . " 2>&1";
+					syslog(LOG_INFO, $cmd);
+					syslog(LOG_INFO, "===== " . shell_exec($cmd));
+				}
+			}
+
+			if(isset($hooks['after_deploy'])) {
+				foreach($hooks['after_deploy'] AS $after_deploy) {
+					$cmd = $after_deploy . " 2>&1";
+					syslog(LOG_INFO, $cmd);
+					syslog(LOG_INFO, "===== " . shell_exec($cmd));
+				}
+			}
+		}
 	}
-
-	echo $output;
-
-	//TODO: Delete request file
-}
-
-?>

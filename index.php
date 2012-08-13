@@ -1,64 +1,58 @@
-<?
+<?php
+	require 'libs/Slim/Slim.php';
+	require 'libs/Paris/idiorm.php';
+	require 'libs/Paris/paris.php';
+	require 'models/Project.php';
+	require 'models/Setting.php';
 
-//Slim
-require 'libs/Slim/Slim.php';
+	ORM::configure('mysql:host=localhost;dbname=slimjim');
+	ORM::configure('username', 'animecyc');
+	ORM::configure('password', '84542737');
 
-// Paris and Idiorm
-require 'libs/Paris/idiorm.php';
-require 'libs/Paris/paris.php';
+	$settings = array();
 
-// Models
-require 'models/Project.php';
-
-//Init DB
-ORM::configure('mysql:host=localhost;dbname=slimjim');
-ORM::configure('username', 'slimjim');
-ORM::configure('password', 'password');
-
-//App with custom settings
-$app = new Slim(array(
-    'log.enable' => true,
-    'log.path' => './logs',
-    'log.level' => 4
-));
-
-//GET route
-$app->get('/', function () {
-    echo "Hello you've reached SlimJim!";
-});
-
-//POST route
-$app->post('/deploy', function () use ($app) {
-	
-	//TODO: Check for github's IP
-	$ip = $app->request()->getIp();
-
-	$payload = $app->request()->params('payload');
-
-    if(empty($payload)) {
-    	$app->halt(403);
-    }
-    
-    $payload = json_decode($payload); 
-
-    if(isset($payload->repository) && isset($payload->ref)) {
-		$payload_branch = explode("/", $payload->ref);
-		$payload_branch = $payload_branch[2];
-		
-    	//Check to see if repo is in the db
-    	$project = Model::factory('Project')
-    				->where_equal('name', $payload->repository->name)
-    				->where_equal('branch', $payload_branch)
-    				->find_one();
-
-		$file = 'requests/'.$payload->after.'.txt';
-		$content = $project->path.'|'.$project->branch;
-
-		file_put_contents($file, $content, LOCK_EX);
-    	
-	} else {
-		$app->halt(400);
+	foreach((Model::factory('Setting')->find_many() ?: array()) AS $obj) {
+		$settings[$obj->key] = $obj->value;
 	}
-});
 
-$app->run();
+	$app = new Slim(array(
+		'settings' => $settings
+	));
+
+	$app->post('/deploy', function () use ($app) {
+		$deploy_settings = $app->config('settings');
+
+		if(! in_array($app->request()->getIp(), explode(',', $deploy_settings['allowed_from']))) {
+			$app->halt(401);
+		}
+
+		if(! ($payload = $app->request()->params('payload'))) {
+			$app->halt(403);
+		}
+
+		$payload = json_decode($payload);
+		
+		if(isset($payload->repository) && isset($payload->ref)) {
+			$payload_branch = explode("/", $payload->ref);
+			$payload_branch = $payload_branch[2];
+
+			$project = Model::factory('Project')
+				->where_equal('name', $payload->repository->name)
+				->where_equal('branch', $payload_branch)
+				->find_one();
+
+			if($project) {
+				file_put_contents('requests/' . $payload->after . '.txt', serialize(array(
+					'name' => $project->name,
+					'clone_url' => $project->clone_url,
+					'path' => $project->path,
+					'branch' => $project->branch,
+					'hook_path' => $project->path . $deploy_settings['hook_file']
+				)), LOCK_EX);
+			}
+		} else {
+			$app->halt(400);
+		}
+	});
+
+	$app->run();

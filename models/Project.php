@@ -1,4 +1,4 @@
 <?php
-class Project extends Model {
- 	public static $_table = 'projects';
-}
+	class Project extends Model {
+		public static $_table = 'projects';
+	}

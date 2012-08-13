@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-	chdir('/home/domains/ve.vq6t2pyw.vesrv.com/public/');
+	chdir('PATH/TO/YOUR/ENVIROMENTS');
 
 	require "libs/spyc.php";
 

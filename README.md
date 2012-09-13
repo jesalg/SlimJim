@@ -1,7 +1,7 @@
 SlimJim
 =======
 
-### WHY! 
+### WHY? 
 
 SlimJim was born out of a need for a simple auto update script which would update multiple development/test environments every time someone commits to their respective Github repository.
 
@@ -17,9 +17,13 @@ Now lets get to it. To configure SlimJim on your server follow these steps:
 
 Basic LAMP setup should suffice. Everything you need is in this repo. I'm using a PHP micro-framework called Slim (thus the name!).
 
+Just don't forget to update the first line in deploy.php to point to the path of your SlimJim directory
+
 Run slimjim.sql on your MySql server
 
 For all the projects that you want to auto-update, add the name of the github repo, branch and the physical path on your server to the Projects table
+
+Modify the IPs in the allowed_from key in the settings table to make sure GitHub or any other site can POST to your endpoint.
 
 **Install & setup [incron](http://inotify.aiken.cz/?section=incron&page=about&lang=en)**
 
@@ -62,3 +66,43 @@ Go to Admin -> Service Hooks and add this URL:
 ``http://slimjim.yourcompany.com/deploy``
 
 That's it! Now sit back and watch Jim do the tedious work! :)
+
+### CONTRIBUTE!
+
+Now if you like what this does, feel free to improve upon code. Just follow these steps to contribute:
+
+* Fork SlimJim on GitHub & Clone your fork onto your machine
+
+ ``git clone git@github.com:[YOUR_USERNAME]/SlimJim.git``
+
+* Pull the *develop* branch from the upstream repository
+
+ ``cd SlimJim``
+
+ ``git remote add upstream git@github.com:jesalg/SlimJim.git``
+
+ ``git fetch upstream``
+
+ ``git checkout -b develop origin/develop``
+
+* Keep develop up-to-date
+  
+ ``git fetch upstream``
+
+ ``git rebase upstream/develop develop``
+
+* Create a feature branch
+
+ ``git flow feature start my_cool_feature``
+
+* Hack Hack Hack
+ 
+ Make sure to commit your work in bite-size chunks, so the commit log remains clear.
+
+* When ready, push the feature branch to your origin
+ 
+  ``git push origin my_cool_feature``
+
+* Issue a [pull request](https://help.github.com/articles/using-pull-requests) to my *develop* branch
+
+* I will test out your cool feature on develop and do a release to master soon thereafter! :)

@@ -22,7 +22,7 @@
         <div class="control-group">
             <label class="control-label" for="inputPath">Path</label>
             <div class="controls">
-                <input type="text" name="path" id="inputPassword" placeholder="/srv/www/slimjim.calistolabs.com/public_html" value="<?= (isset($data['project']->path)) ? $data['project']->path : ''?>"/>
+                <input type="text" name="path" id="inputPassword" placeholder="/srv/www/slimjim.[yourCompany].com/public_html" value="<?= (isset($data['project']->path)) ? $data['project']->path : ''?>"/>
             </div>
         </div>
         <?php if(isset($data['project']->id)):?>

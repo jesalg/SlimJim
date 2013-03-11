@@ -1,0 +1,68 @@
+/* 
+    Document   : slimjim
+    Created on : Sep 13, 2012, 3:11:48 PM
+    Author     : atorres
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.header:after {
+    bottom: 0;
+    content: "";
+    display: block;
+    left: 0;
+    opacity: 0.4;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.masthead {
+    color: #FFFFFF;
+    margin-bottom: 0;
+    padding: 70px 0 80px;
+}
+.header {
+    background: -moz-linear-gradient(45deg, #020031 0%, #6D3353 100%) repeat scroll 0 0 transparent; background: -webkit-linear-gradient(45deg, #020031 0%, #6D3353 100%) repeat scroll 0 0 transparent;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
+    color: #FFFFFF;
+    padding: 40px 0;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.075);
+}
+
+#data-content{
+    max-width: 950px;
+    margin: 0px auto;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   background: -moz-linear-gradient(45deg, #020031 0%, #6D3353 100%) repeat scroll 0 0 transparent; background: -webkit-linear-gradient(45deg, #020031 0%, #6D3353 100%) repeat scroll 0 0 transparent;
+   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) inset, 0 -3px 7px rgba(0, 0, 0, 0.2) inset;
+   color: #FFFFFF;
+   padding: 10px;
+   text-align: center;
+}
+
+#flash-message{
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#flash-message .success{
+    padding: 10px;
+    background-color: #DFF0D8;
+}
+
+#flash-message .error{
+    padding: 10px;
+    background-color: #F2DEDE;
+}
+
+

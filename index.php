@@ -5,9 +5,9 @@
 	require 'models/Project.php';
 	require 'models/Setting.php';
 
-	ORM::configure('mysql:host=localhost;dbname=dbname');
-	ORM::configure('username', 'username');
-	ORM::configure('password', 'password');
+	ORM::configure('mysql:host=localhost;dbname=slimjim');
+	ORM::configure('username', 'root');
+	ORM::configure('password', '');
 
 	$settings = array();
 

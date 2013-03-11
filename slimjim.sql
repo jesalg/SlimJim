@@ -12,9 +12,10 @@ CREATE TABLE `projects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `settings` (
+`id` int(10) NOT NULL AUTO_INCREMENT,
   `key` varchar(100) NOT NULL DEFAULT '',
   `value` text,
-  PRIMARY KEY (`key`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 LOCK TABLES `settings` WRITE;
@@ -23,5 +24,19 @@ INSERT INTO `settings` (`key`, `value`)
 VALUES
 	('allowed_from','207.97.227.253,50.57.128.197,108.171.174.178'),
 	('hook_file','Hooks');
+
+UNLOCK TABLES;
+
+CREATE TABLE `admins` (
+	`id` INT(10) NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NULL DEFAULT NULL,
+	`password` VARCHAR(50) NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+LOCK TABLES `admins` WRITE;
+
+INSERT INTO `admins` (`username`, `password`) VALUES ('admin', '21232f297a57a5a743894a0e4a801fc3');
 
 UNLOCK TABLES;

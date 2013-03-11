@@ -6,8 +6,8 @@
 	require 'models/Setting.php';
 
 	ORM::configure('mysql:host=localhost;dbname=slimjim');
-	ORM::configure('username', 'username');
-	ORM::configure('password', 'password');
+	ORM::configure('username', 'root');
+	ORM::configure('password', '');
 
 	$settings = array();
 

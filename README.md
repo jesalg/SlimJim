@@ -15,15 +15,17 @@ Now lets get to it. To configure SlimJim on your server follow these steps:
 
 **Setup site and DB**
 
-Basic LAMP setup should suffice. Everything you need is in this repo. I'm using a PHP micro-framework called Slim (thus the name!).
+Basic LAMP setup should suffice. Everything you need is in this repo. I'm using a PHP micro-framework called Slim (thus the name!) which requires PHP 5.3.0 or newer.
 
-Just don't forget to update the first line in deploy.php to point to the path of your SlimJim directory
+Update the first line in deploy.php to point to the path of your SlimJim directory.
 
-Run slimjim.sql on your MySql server
+Run slimjim.sql on your MySql server. Update /index.php & /admin/index.php with appropriate host, username, and password for the database.
 
-For all the projects that you want to auto-update, add the name of the github repo, branch and the physical path on your server to the Projects table
+For all the projects that you want to auto-update, add the name of the github repo, branch and the physical path on your server to the projects table.
 
 Modify the IPs in the allowed_from key in the settings table to make sure GitHub or any other site can POST to your endpoint.
+
+Alternatively, you can also manage projects and other settings by going to the administrative interface located at /admin
 
 **Install & setup [incron](http://inotify.aiken.cz/?section=incron&page=about&lang=en)**
 

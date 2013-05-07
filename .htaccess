@@ -1,3 +1,7 @@
+# Disable MultiViews, If this is not turned off it may cause
+# the redirection of /deploy to go to /deploy.php
+Options -MultiViews
+
 RewriteEngine On
 
 # Some hosts may require you to use the `RewriteBase` directive.

@@ -9,7 +9,7 @@ require '../libs/Paris/paris.php';
 require '../models/Project.php';
 require '../models/Setting.php';
 require '../models/Admin.php';
-require '../libs/Slim/customView.php';
+require '../libs/Slim/CustomView.php';
 
 ORM::configure('mysql:host=localhost;dbname=slimjim');
 ORM::configure('username', 'root');

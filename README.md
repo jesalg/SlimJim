@@ -23,8 +23,6 @@ Run slimjim.sql on your MySql server. Update /index.php & /admin/index.php with 
 
 For all the projects that you want to auto-update, add the name of the github repo, branch and the physical path on your server to the projects table.
 
-Modify the IPs in the allowed_from key in the settings table to make sure GitHub or any other site can POST to your endpoint.
-
 Alternatively, you can also manage projects and other settings by going to the administrative interface located at /admin
 
 **Install & setup [incron](http://inotify.aiken.cz/?section=incron&page=about&lang=en)**
@@ -47,13 +45,17 @@ Now watch your requests directory for updates
 
 Add this, save and quit:
 
-``/srv/www/slimjim.yourcompany.com/public_html/requests/ IN_CREATE php /srv/www/slimjim.yourcompany.com/public_html/deploy.php $#``
+``/srv/www/slimjim.yourcompany.com/public_html/requests/ IN_CLOSE_WRITE php /srv/www/slimjim.yourcompany.com/public_html/deploy.php $#``
 
 **Permissions**
 
 Give execute permissions to the deploy script
 
 ``root@yourhost:/# chmod +x deploy.php``
+
+Allow writing to the requests folder
+
+``root@yourhost:/# chmod 777 /srv/www/slimjim.yourcompany.com/public_html/requests``
 
 Give permissions to pull from github to the root user (make sure to leave the password empty) 
 
@@ -67,7 +69,7 @@ Go to Admin -> Service Hooks and add this URL:
 
 ``http://slimjim.yourcompany.com/deploy``
 
-That's it! Now sit back and watch Jim do the tedious work! :)
+That's it! Now sit back and watch SlimJim do the tedious work! :)
 
 ### CONTRIBUTE!
 

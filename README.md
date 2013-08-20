@@ -53,6 +53,10 @@ Give execute permissions to the deploy script
 
 ``root@yourhost:/# chmod +x deploy.php``
 
+Allow writing to the requests folder
+
+``root@yourhost:/# chmod 777 /srv/www/slimjim.yourcompany.com/public_html/requests``
+
 Give permissions to pull from github to the root user (make sure to leave the password empty) 
 
 ``root@yourhost:/# ssh-keygen -t rsa -C "root@yourhost"``
@@ -65,7 +69,7 @@ Go to Admin -> Service Hooks and add this URL:
 
 ``http://slimjim.yourcompany.com/deploy``
 
-That's it! Now sit back and watch Jim do the tedious work! :)
+That's it! Now sit back and watch SlimJim do the tedious work! :)
 
 ### CONTRIBUTE!
 

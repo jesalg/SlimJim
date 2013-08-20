@@ -47,7 +47,7 @@ Now watch your requests directory for updates
 
 Add this, save and quit:
 
-``/srv/www/slimjim.yourcompany.com/public_html/requests/ IN_CREATE php /srv/www/slimjim.yourcompany.com/public_html/deploy.php $#``
+``/srv/www/slimjim.yourcompany.com/public_html/requests/ IN_CLOSE_WRITE php /srv/www/slimjim.yourcompany.com/public_html/deploy.php $#``
 
 **Permissions**
 

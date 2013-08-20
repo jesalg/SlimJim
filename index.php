@@ -15,6 +15,17 @@
 		$settings[$obj->key] = $obj->value;
 	}
 
+    function cidr_match($ip, $cidrs) {
+        $result = false;
+        foreach($cidrs as $cidr) {
+            list($subnet, $mask) = explode('/', $cidr);
+            if ((ip2long($ip) & ~((1 << (32 - $mask)) - 1) ) == ip2long($subnet)) {
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
 	$app = new Slim(array(
 		'settings' => $settings
 	));
@@ -22,7 +33,10 @@
 	$app->post('/deploy', function () use ($app) {
 		$deploy_settings = $app->config('settings');
 
-		if(! in_array($app->request()->getIp(), explode(',', $deploy_settings['allowed_from']))) {
+        $github_meta = json_decode(file_get_contents('https://api.github.com/meta'), true);
+        $cidrs = $github_meta['hooks'];
+
+		if(!cidr_match($app->request()->getIp(), $cidrs)) {
 			$app->halt(401);
 		}
 

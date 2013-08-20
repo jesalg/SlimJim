@@ -21,9 +21,7 @@ CREATE TABLE `settings` (
 LOCK TABLES `settings` WRITE;
 
 INSERT INTO `settings` (`key`, `value`)
-VALUES
-	('allowed_from','207.97.227.253,50.57.128.197,108.171.174.178'),
-	('hook_file','Hooks');
+VALUES ('hook_file','Hooks');
 
 UNLOCK TABLES;
 

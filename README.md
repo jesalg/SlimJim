@@ -23,8 +23,6 @@ Run slimjim.sql on your MySql server. Update /index.php & /admin/index.php with 
 
 For all the projects that you want to auto-update, add the name of the github repo, branch and the physical path on your server to the projects table.
 
-Modify the IPs in the allowed_from key in the settings table to make sure GitHub or any other site can POST to your endpoint.
-
 Alternatively, you can also manage projects and other settings by going to the administrative interface located at /admin
 
 **Install & setup [incron](http://inotify.aiken.cz/?section=incron&page=about&lang=en)**

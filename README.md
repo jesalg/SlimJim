@@ -65,9 +65,11 @@ Copy and paste the contents from ~/.ssh/id_rsa.pub to Account Settings > SSH Key
 
 **Add Post-Receive URL**
 
-Go to Admin -> Service Hooks and add this URL:
+Add either one of these URLs as a webhook in your repository settings:
 
-``http://slimjim.yourcompany.com/deploy``
+For GitHub: ``http://slimjim.yourcompany.com/gh_hook``
+
+For BitBucket: ``http://slimjim.yourcompany.com/bb_hook``
 
 That's it! Now sit back and watch SlimJim do the tedious work! :)
 

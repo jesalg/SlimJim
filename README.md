@@ -65,7 +65,7 @@ Copy and paste the contents from ~/.ssh/id_rsa.pub to Account Settings > SSH Key
 
 **Add Post-Receive URL**
 
-Add either one of these URLs as a webhook in your repository settings:
+Add the appropriate one of these URLs as a webhook in your repository settings:
 
 For GitHub: ``http://slimjim.yourcompany.com/gh_hook``
 

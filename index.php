@@ -30,14 +30,17 @@
         return $result;
     };
 
-    function create_request($repo_name, $repo_branch) {
+    function create_request($repo_name, $repo_branch, $after_sha) {
+    	global $app;
+    	$deploy_settings = $app->config('settings');
+
 		$project = Model::factory('Project')
 			->where_equal('name', $repo_name)
 			->where_equal('branch', $repo_branch)
 			->find_one();
 
 		if($project) {
-			file_put_contents('requests/' . $payload->after . '.txt', serialize(array(
+			file_put_contents('requests/' . $after_sha . '.txt', serialize(array(
 				'name' => $project->name,
 				'clone_url' => $project->clone_url,
 				'path' => $project->path,
@@ -47,13 +50,11 @@
 		}
     };
 
-    $app->get('/', function () use ($app) {
+    $app->get('/', function() use ($app) {
     	echo "Silence is golden";
     });
 
-	$app->post('/gh_hook', function () use ($app) {
-		$deploy_settings = $app->config('settings');
-
+	$app->post('/gh_hook', function() use ($app) {
         $github_meta = json_decode(file_get_contents('https://api.github.com/meta'), true);
         $cidrs = $github_meta['hooks'];
 
@@ -70,23 +71,20 @@
 		if(isset($payload->repository) && isset($payload->ref)) {
 			$payload_branch = explode("/", $payload->ref);
 			$payload_branch = $payload_branch[2];
-			create_request($payload->repository->name, $payload_branch);
+			create_request($payload->repository->name, $payload_branch, $payload->after);
 		} else {
 			$app->halt(400);
 		}
 	});
 
-	$app->post('/bb_hook', function () use ($app) {
-		$deploy_settings = $app->config('settings');
-
+	$app->post('/bb_hook', function() use ($app) {
         $bitbucket_ips = array('131.103.20.165','131.103.20.166');
-        $request = $app->request();
-
-        if(!in_array($request->getIp(), $bitbucket_ips)) {
+        
+        if(!in_array($app->request()->getIp(), $bitbucket_ips)) {
         	$app->halt(401);
         }
 
-		if(!($payload = $request->getBody())) {
+		if(!($payload = $app->request()->getBody())) {
 			$app->halt(403);
 		}
 
@@ -94,7 +92,8 @@
 
 		if(isset($payload->repository)) {
 			$payload_branch = $payload->commits[0]->branch;
-			create_request($payload->repository->slug, $payload_branch);
+			$after_sha = $payload->commits[0]->parents[0];
+			create_request($payload->repository->slug, $payload_branch, $after_sha);
 		} else {
 			$app->halt(400);
 		}

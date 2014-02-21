@@ -19,6 +19,18 @@
 		'settings' => $settings
 	));
 
+	function get_github_meta() {
+		$curl_handle=curl_init();
+		curl_setopt($curl_handle, CURLOPT_URL,'https://api.github.com/meta');
+		curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl_handle, CURLOPT_USERAGENT, 'SlimJim');
+		$response = curl_exec($curl_handle);
+		$github_meta = json_decode($response);
+		curl_close($curl_handle);
+		return $github_meta;
+	};
+
     function cidr_match($ip, $cidrs) {
         $result = false;
         foreach($cidrs as $cidr) {
@@ -55,8 +67,8 @@
     });
 
 	$app->post('/gh_hook', function() use ($app) {
-        $github_meta = json_decode(file_get_contents('https://api.github.com/meta'), true);
-        $cidrs = $github_meta['hooks'];
+		$github_meta = get_github_meta();
+        $cidrs = $github_meta->hooks;
 
 		if(!cidr_match($app->request()->getIp(), $cidrs)) {
 			$app->halt(401);

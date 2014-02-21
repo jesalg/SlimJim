@@ -84,7 +84,7 @@
         	$app->halt(401);
         }
 
-		if(!($payload = $app->request()->getBody())) {
+		if(!($payload = $app->request()->params('payload'))) {
 			$app->halt(403);
 		}
 

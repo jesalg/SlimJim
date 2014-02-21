@@ -15,6 +15,22 @@
 		$settings[$obj->key] = $obj->value;
 	}
 
+	$app = new Slim(array(
+		'settings' => $settings
+	));
+
+	function get_github_meta() {
+		$curl_handle=curl_init();
+		curl_setopt($curl_handle, CURLOPT_URL,'https://api.github.com/meta');
+		curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl_handle, CURLOPT_USERAGENT, 'SlimJim');
+		$response = curl_exec($curl_handle);
+		$github_meta = json_decode($response);
+		curl_close($curl_handle);
+		return $github_meta;
+	};
+
     function cidr_match($ip, $cidrs) {
         $result = false;
         foreach($cidrs as $cidr) {
@@ -24,23 +40,41 @@
             }
         }
         return $result;
-    }
+    };
 
-	$app = new Slim(array(
-		'settings' => $settings
-	));
+    function create_request($repo_name, $repo_branch, $after_sha) {
+    	global $app;
+    	$deploy_settings = $app->config('settings');
 
-	$app->post('/deploy', function () use ($app) {
-		$deploy_settings = $app->config('settings');
+		$project = Model::factory('Project')
+			->where_equal('name', $repo_name)
+			->where_equal('branch', $repo_branch)
+			->find_one();
 
-        $github_meta = json_decode(file_get_contents('https://api.github.com/meta'), true);
-        $cidrs = $github_meta['hooks'];
+		if($project) {
+			file_put_contents('requests/' . $after_sha . '.txt', serialize(array(
+				'name' => $project->name,
+				'clone_url' => $project->clone_url,
+				'path' => $project->path,
+				'branch' => $project->branch,
+				'hook_path' => $project->path . $deploy_settings['hook_file']
+			)), LOCK_EX);
+		}
+    };
+
+    $app->get('/', function() use ($app) {
+    	echo "Silence is golden";
+    });
+
+	$app->post('/gh_hook', function() use ($app) {
+		$github_meta = get_github_meta();
+        $cidrs = $github_meta->hooks;
 
 		if(!cidr_match($app->request()->getIp(), $cidrs)) {
 			$app->halt(401);
 		}
 
-		if(! ($payload = $app->request()->params('payload'))) {
+		if(!($payload = $app->request()->params('payload'))) {
 			$app->halt(403);
 		}
 
@@ -49,21 +83,29 @@
 		if(isset($payload->repository) && isset($payload->ref)) {
 			$payload_branch = explode("/", $payload->ref);
 			$payload_branch = $payload_branch[2];
+			create_request($payload->repository->name, $payload_branch, $payload->after);
+		} else {
+			$app->halt(400);
+		}
+	});
 
-			$project = Model::factory('Project')
-				->where_equal('name', $payload->repository->name)
-				->where_equal('branch', $payload_branch)
-				->find_one();
+	$app->post('/bb_hook', function() use ($app) {
+        $bitbucket_ips = array('131.103.20.165','131.103.20.166');
+        
+        if(!in_array($app->request()->getIp(), $bitbucket_ips)) {
+        	$app->halt(401);
+        }
 
-			if($project) {
-				file_put_contents('requests/' . $payload->after . '.txt', serialize(array(
-					'name' => $project->name,
-					'clone_url' => $project->clone_url,
-					'path' => $project->path,
-					'branch' => $project->branch,
-					'hook_path' => $project->path . $deploy_settings['hook_file']
-				)), LOCK_EX);
-			}
+		if(!($payload = $app->request()->params('payload'))) {
+			$app->halt(403);
+		}
+
+		$payload = json_decode($payload);
+
+		if(isset($payload->repository)) {
+			$payload_branch = $payload->commits[0]->branch;
+			$after_sha = $payload->commits[0]->parents[0];
+			create_request($payload->repository->slug, $payload_branch, $after_sha);
 		} else {
 			$app->halt(400);
 		}

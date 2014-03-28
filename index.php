@@ -4,10 +4,11 @@
 	require 'libs/Paris/paris.php';
 	require 'models/Project.php';
 	require 'models/Setting.php';
+	require 'config.php';
 
-	ORM::configure('mysql:host=localhost;dbname=slimjim');
-	ORM::configure('username', 'root');
-	ORM::configure('password', '');
+	ORM::configure('mysql:host='.CUSTOM_CONFIG::$DB_HOST . ';dbname='.CUSTOM_CONFIG::$DB_NAME);
+	ORM::configure('username', CUSTOM_CONFIG::$DB_USER);
+	ORM::configure('password', CUSTOM_CONFIG::$DB_PASS);
 
 	$settings = array();
 

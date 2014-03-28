@@ -36,3 +36,6 @@ intermediate
 publish
 .idea
 requests/*
+
+# Custom configuration to ignore
+/config.php

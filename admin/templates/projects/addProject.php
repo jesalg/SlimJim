@@ -4,7 +4,7 @@
         <div class="control-group">
             <label class="control-label" for="inputCloneUrl">Clone URL</label>
             <div class="controls">
-                <input type="text" name ="clone_url" id="inputCloneUrl" placeholder="git:github.com:[USERNAME]/project.git" value="<?= (isset($data['project']->clone_url)) ? $data['project']->clone_url : ''?>"/>
+                <input type="text" name ="clone_url" id="inputCloneUrl" placeholder="git@github.com:[USERNAME]/project.git" value="<?= (isset($data['project']->clone_url)) ? $data['project']->clone_url : ''?>"/>
             </div>
         </div>
         <div class="control-group">
@@ -16,7 +16,7 @@
         <div class="control-group">
             <label class="control-label" for="inputBranch">Branch</label>
             <div class="controls">
-                <input type="text" name="branch" id="inputBranch" placeholder="Master/Develop" value="<?= (isset($data['project']->branch)) ? $data['project']->branch : ''?>"/>
+                <input type="text" name="branch" id="inputBranch" placeholder="master/development" value="<?= (isset($data['project']->branch)) ? $data['project']->branch : ''?>"/>
             </div>
         </div>
         <div class="control-group">

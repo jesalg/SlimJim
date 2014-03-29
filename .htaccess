@@ -12,3 +12,9 @@ RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [QSA,L]
+
+# Deny access to config.php
+<Files config.php>
+	Order Allow,Deny
+	Deny from all
+</Files>

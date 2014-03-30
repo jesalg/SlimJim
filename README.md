@@ -27,9 +27,9 @@ Copy `config.sample.php` to `config.php` in the root folder and modify the follo
     
         /* MySQL */
         public static $DB_NAME	= 'slimjim';
-    public static $DB_HOST  = 'localhost';
+        public static $DB_HOST  = 'localhost';
         public static $DB_USER	= 'root';
-    public static $DB_PASS	= '';
+        public static $DB_PASS	= '';
     }
 
 For all the projects that you want to auto-update, add the name of the github repo, branch and the physical path on your server to the projects table.
@@ -74,9 +74,9 @@ Give permissions to pull from github to the root user (make sure to leave the pa
 
 Copy the contents from ~/.ssh/id_rsa.pub and [add to GitHub][1] or [add to BitBucket][2]
 
-4) **Add Post-Receive URL**
+4) **Add Post-Receive Webhook**
 
-Finally, add the appropriate one of these URLs as a webhook in your repository settings:
+Finally, add the appropriate one of these URLs as a webhook into your repository settings:
 
 For GitHub: ``http://slimjim.yourcompany.com/gh_hook``
 

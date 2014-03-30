@@ -12,7 +12,7 @@
         <div id="overview" class="header masthead">
             <div class="container">
                 <h1>SlimJim Log In</h1>
-                <p>Add your git project to the database to deploy them!</p>
+                <p>Manage your auto deploy settings.</p>
             </div>
         </div>
 

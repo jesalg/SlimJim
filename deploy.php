@@ -1,6 +1,8 @@
 #!/usr/bin/php
 <?php
-	chdir('PATH/TO/YOUR/SLIMJIM/DIR');
+	require "config.php";
+
+	chdir(CUSTOM_CONFIG::$ROOT_PATH);
 
 	require "libs/spyc.php";
 

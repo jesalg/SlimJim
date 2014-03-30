@@ -10,10 +10,11 @@ require '../models/Project.php';
 require '../models/Setting.php';
 require '../models/Admin.php';
 require '../libs/Slim/CustomView.php';
+require '../config.php';
 
-ORM::configure('mysql:host=localhost;dbname=slimjim');
-ORM::configure('username', 'root');
-ORM::configure('password', '');
+ORM::configure('mysql:host='.CUSTOM_CONFIG::$DB_HOST . ';dbname='.CUSTOM_CONFIG::$DB_NAME);
+ORM::configure('username', CUSTOM_CONFIG::$DB_USER);
+ORM::configure('password', CUSTOM_CONFIG::$DB_PASS);
 
 $app = new Slim(array(
     'view' => new CustomView()

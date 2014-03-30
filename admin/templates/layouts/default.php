@@ -41,7 +41,7 @@
             <div class="header masthead" style="margin-top: 35px;">
                 <div class="container">
                     <h1>SlimJim Admin</h1>
-                    <p>Add your git project to the database to deploy it fast!</p>
+                    <p>Manage your auto deploy settings.</p>
                 </div>
             </div>
         <?php endif;?>
@@ -64,7 +64,7 @@
         </div>
 
         <div id="footer">
-            SlimJim 2012
+            SlimJim 2014
         </div>
 
     </body>

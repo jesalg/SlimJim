@@ -11,21 +11,32 @@ But I found them to be more complicated to setup just for a basic need i.e to si
 
 ### INSTALLATION 
 
-Now lets get to it. To configure SlimJim on your server follow these steps:
+To configure SlimJim on your server just follow these 4 steps:
 
-**Setup site and DB**
+1) **Setup site and DB**
 
-Basic LAMP setup should suffice. Everything you need is in this repo. I'm using a PHP micro-framework called Slim (thus the name!) which requires PHP 5.3.0 or newer.
+Basic LAMP website setup should suffice. Everything you need is in this repo. I'm using a PHP micro-framework called Slim (thus the name!) which requires PHP 5.3.0 or newer.
 
-Update the first line in `deploy.php` to point to the path of your SlimJim directory.
+Run `slimjim.sql` on your MySql server. 
 
-Run `slimjim.sql` on your MySql server. Update `/index.php` & `/admin/index.php` with appropriate host, username, and password for the database.
+Copy `config.sample.php` to `config.php` in the root folder and modify the following variables as needed:
+
+    class CUSTOM_CONFIG {
+        /* Paths */
+       public static $ROOT_PATH = '/srv/www/slimjim.yourcompany.com/public_html/';
+    
+        /* MySQL */
+        public static $DB_NAME	= 'slimjim';
+        public static $DB_HOST  = 'localhost';
+        public static $DB_USER	= 'root';
+        public static $DB_PASS	= '';
+    }
 
 For all the projects that you want to auto-update, add the name of the github repo, branch and the physical path on your server to the projects table.
 
 Alternatively, you can also manage projects and other settings by going to the administrative interface located at /admin
 
-**Install & setup [incron](http://inotify.aiken.cz/?section=incron&page=about&lang=en)**
+2) **Install & setup [incron](http://inotify.aiken.cz/?section=incron&page=about&lang=en)**
 
 When the site receives a payload from the post-receive hook it will drop a request in the /requests folder. Incron is needed to listen for that event and trigger the deploy script.
 
@@ -47,7 +58,7 @@ Add this, save and quit:
 
 ``/srv/www/slimjim.yourcompany.com/public_html/requests/ IN_CLOSE_WRITE php /srv/www/slimjim.yourcompany.com/public_html/deploy.php $#``
 
-**Permissions**
+3) **Permissions**
 
 Give execute permissions to the deploy script
 
@@ -63,9 +74,9 @@ Give permissions to pull from github to the root user (make sure to leave the pa
 
 Copy the contents from ~/.ssh/id_rsa.pub and [add to GitHub][1] or [add to BitBucket][2]
 
-**Add Post-Receive URL**
+4) **Add Post-Receive Webhook**
 
-Add the appropriate one of these URLs as a webhook in your repository settings:
+Finally, add the appropriate one of these URLs as a webhook into your repository settings:
 
 For GitHub: ``http://slimjim.yourcompany.com/gh_hook``
 

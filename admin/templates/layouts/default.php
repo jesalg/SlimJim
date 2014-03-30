@@ -64,7 +64,7 @@
         </div>
 
         <div id="footer">
-            SlimJim 2012
+            SlimJim 2014
         </div>
 
     </body>

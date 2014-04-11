@@ -9,6 +9,8 @@ I know there are many deployment/build scripts out there like whiskey_disk, Vlad
 
 But I found them to be more complicated to setup just for a basic need i.e to simply update a development/test environment using a post-receive hook without any manual user interaction on behalf of the committer besides ``git push...``
 
+![How SlimJim Works](/SlimJim.png "How SlimJim Works")
+
 ### INSTALLATION 
 
 To configure SlimJim on your server just follow these 4 steps:

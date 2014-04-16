@@ -26,6 +26,10 @@
 		curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
 		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl_handle, CURLOPT_USERAGENT, 'SlimJim');
+		/* Curl SSL verification can be bypassed, e.g. for a server with self-signed certificates. */
+		$curl_ssl_verification	= (isset(CUSTOM_CONFIG::$CURL_SSL_VERIFICATION))	?	(bool)CUSTOM_CONFIG::$CURL_SSL_VERIFICATION	:	true;
+		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, ($curl_ssl_verification ? 2 : false));
+		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, $curl_ssl_verification);
 		$response = curl_exec($curl_handle);
 		$github_meta = json_decode($response);
 		curl_close($curl_handle);

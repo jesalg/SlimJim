@@ -73,7 +73,7 @@
 
 	$app->post('/gh_hook', function() use ($app) {
 		$github_meta = get_github_meta();
-        $cidrs = $github_meta->hooks;
+        $cidrs = isset($github_meta->hooks)	?	$github_meta->hooks	:	array();
 
 		if(!cidr_match($app->request()->getIp(), $cidrs)) {
 			$app->halt(401);

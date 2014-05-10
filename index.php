@@ -26,6 +26,10 @@
 		curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
 		curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl_handle, CURLOPT_USERAGENT, 'SlimJim');
+		/* Curl SSL verification can be bypassed, e.g. for a server with self-signed certificates without ca-chain. */
+		$curl_ssl_verification	= (isset(CUSTOM_CONFIG::$GITHUB_CURL_SSL_VERIFICATION))	?	(bool)CUSTOM_CONFIG::$GITHUB_CURL_SSL_VERIFICATION	:	true;
+		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, ($curl_ssl_verification ? 2 : false));
+		curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, $curl_ssl_verification);
 		$response = curl_exec($curl_handle);
 		$github_meta = json_decode($response);
 		curl_close($curl_handle);
@@ -68,11 +72,16 @@
     });
 
 	$app->post('/gh_hook', function() use ($app) {
-		$github_meta = get_github_meta();
-        $cidrs = $github_meta->hooks;
-
-		if(!cidr_match($app->request()->getIp(), $cidrs)) {
-			$app->halt(401);
+		
+		if (!isset(CUSTOM_CONFIG::$GITHUB_CIDR_VERIFICATION) || CUSTOM_CONFIG::$GITHUB_CIDR_VERIFICATION) {
+			
+			$github_meta = get_github_meta();
+	        $cidrs = isset($github_meta->hooks)	?	$github_meta->hooks	:	array();
+	
+			if(!cidr_match($app->request()->getIp(), $cidrs)) {
+				$app->halt(401);
+			}
+			
 		}
 
 		if(!($payload = $app->request()->params('payload'))) {

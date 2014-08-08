@@ -8,12 +8,12 @@
 	class CUSTOM_CONFIG {
 		
 		/* Paths */
-		public static $ROOT_PATH					= '/var/www/your.slimjim.path/';
+		public static $ROOT_PATH					= '/srv/www/slimjim.yourcompany.com/public_html/';
 						
 		/* MySQL */
 		public static $DB_NAME						= 'slimjim';
 		public static $DB_HOST						= 'localhost';
-		public static $DB_USER						= 'slimjim';
+		public static $DB_USER						= 'root';
 		public static $DB_PASS						= '';
 		
 		/* Github settings */

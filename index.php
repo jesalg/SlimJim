@@ -51,19 +51,21 @@
     	global $app;
     	$deploy_settings = $app->config('settings');
 
-		$project = Model::factory('Project')
+		$arrProjects = Model::factory('Project')
 			->where_equal('name', $repo_name)
 			->where_equal('branch', $repo_branch)
-			->find_one();
+			->find_many();
 
-		if($project) {
-			file_put_contents('requests/' . $after_sha . '.txt', serialize(array(
-				'name' => $project->name,
-				'clone_url' => $project->clone_url,
-				'path' => $project->path,
-				'branch' => $project->branch,
-				'hook_path' => $project->path . $deploy_settings['hook_file']
-			)), LOCK_EX);
+		foreach ($arrProjects as $project) {
+			if($project) {
+				file_put_contents('requests/' . $project->id . "_" . $after_sha . '.txt', serialize(array(
+					'name' => $project->name,
+					'clone_url' => $project->clone_url,
+					'path' => $project->path,
+					'branch' => $project->branch,
+					'hook_path' => $project->path . $deploy_settings['hook_file']
+				)), LOCK_EX);
+			}
 		}
     };
 

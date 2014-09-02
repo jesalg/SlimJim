@@ -92,7 +92,8 @@
 		
 		if(isset($payload->repository) && isset($payload->ref)) {
 			$payload_branch = explode("/", $payload->ref);
-			$payload_branch = $payload_branch[2];
+			//Allow branches with slashes, such as implemented by git-flow (e.g. release/v1.1)
+			$payload_branch = substr($payload->ref, strlen($payload_branch[0]."/".$payload_branch[1])+1);
 			create_request($payload->repository->name, $payload_branch, $payload->after);
 		} else {
 			$app->halt(400);

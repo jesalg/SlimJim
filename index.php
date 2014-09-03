@@ -51,19 +51,21 @@
     	global $app;
     	$deploy_settings = $app->config('settings');
 
-		$project = Model::factory('Project')
+		$arrProjects = Model::factory('Project')
 			->where_equal('name', $repo_name)
 			->where_equal('branch', $repo_branch)
-			->find_one();
+			->find_many();
 
-		if($project) {
-			file_put_contents('requests/' . $after_sha . '.txt', serialize(array(
-				'name' => $project->name,
-				'clone_url' => $project->clone_url,
-				'path' => $project->path,
-				'branch' => $project->branch,
-				'hook_path' => $project->path . $deploy_settings['hook_file']
-			)), LOCK_EX);
+		foreach ($arrProjects as $project) {
+			if($project) {
+				file_put_contents('requests/' . $project->id . "_" . $after_sha . '.txt', serialize(array(
+					'name' => $project->name,
+					'clone_url' => $project->clone_url,
+					'path' => $project->path,
+					'branch' => $project->branch,
+					'hook_path' => $project->path . $deploy_settings['hook_file']
+				)), LOCK_EX);
+			}
 		}
     };
 
@@ -92,7 +94,8 @@
 		
 		if(isset($payload->repository) && isset($payload->ref)) {
 			$payload_branch = explode("/", $payload->ref);
-			$payload_branch = $payload_branch[2];
+			//Allow branches with slashes, such as implemented by git-flow (e.g. release/v1.1)
+			$payload_branch = substr($payload->ref, strlen($payload_branch[0]."/".$payload_branch[1])+1);
 			create_request($payload->repository->name, $payload_branch, $payload->after);
 		} else {
 			$app->halt(400);

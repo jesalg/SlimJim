@@ -39,7 +39,7 @@
 }
 
 #footer {
-   position:absolute;
+   position:fixed;
    bottom:0;
    width:100%;
    background: -moz-linear-gradient(45deg, #020031 0%, #6D3353 100%) repeat scroll 0 0 transparent; background: -webkit-linear-gradient(45deg, #020031 0%, #6D3353 100%) repeat scroll 0 0 transparent;
